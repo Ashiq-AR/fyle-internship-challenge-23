@@ -1,0 +1,76 @@
+<header class="flex justify-between items-center mx-10">
+    <div class="text-3xl text-[#3f51b5]">
+        Repositories <span class="text-base font-semibold">( {{ (userService.currentUser|async).public_repos }} )</span>
+    </div>
+    <mat-form-field class="w-32">
+        <mat-label>Per page</mat-label>
+        <mat-select [formControl]="perPageControl" (selectionChange)="calcNoOfPagination();requestPagesFromApi()">
+            <mat-option *ngFor="let value of perPageOpts" [value]="value">{{ value }}</mat-option>
+        </mat-select>
+    </mat-form-field>
+</header>
+<section class="grid xl:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-5 mx-5 mb-2">
+    <ng-container *ngIf="!userService.isReposLoading; else cardSkeletonLoader">
+        <mat-card class="space-y-4" *ngFor="let repo of repos | slice: 0: perPageControl.value ?? 10">
+            <mat-card-header>
+                <mat-card-title>{{ repo?.name }}</mat-card-title>
+                <mat-card-subtitle>{{ repo?.description }}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="mb-2">{{ repo?.language }}</div>
+                <div class="flex items-center gap-2"> 
+                    <mat-icon>link</mat-icon>
+                    <a [href]="repo?.html_url" target="_blank">{{ repo?.html_url }}</a>
+                </div>
+                <!-- <div class="flex gap-3 flex-wrap" *ngFor="let topic of repo?.topics">
+                    <div>{{ topic }}</div>
+                </div> -->
+                <ul class="flex gap-3 flex-wrap mt-2">
+                    <li class="bg-[#3f51b5] text-white px-3 py-1 rounded-full" *ngFor="let topic of repo?.topics">{{ topic }}</li>
+                </ul>
+            </mat-card-content>
+        </mat-card>
+    </ng-container>
+</section>
+<!-- <div class="fixed bottom-0 w-screen"> -->
+    <div class="bg-white sticky left-0 bottom-0 w-full flex justify-between items-center shadow-lg">
+        <button mat-mini-fab color="primary" class="m-2 ml-4" [disabled]="selectedPageArrayIndex==0" (click)="getAndUpdatePagePrevious()">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+        <div class="flex justify-center items-center gap-2 overflow-auto">
+            <button 
+            class="w-10 h-10 hover:bg-[#3f51b5] bg-purple-50 hover:text-white rounded-md shrink-0" 
+            [ngClass]="{'selected-page':(i-1) == selectedPageArrayIndex}" 
+            *ngFor="let i of noOfPagesArray" 
+            (click)="onPageSelect(i)"
+            >{{ i }}</button>
+        </div>
+        <button mat-mini-fab 
+        color="primary" 
+        class="m-2 mr-4" 
+        (click)="getAndUpdatePageNext()"
+        [disabled]="selectedPageArrayIndex == noOfPagesArray.length-1"
+        >
+            <mat-icon>arrow_forward</mat-icon>
+        </button>
+    </div>
+<!-- </div> -->
+
+<ng-template #cardSkeletonLoader>
+    <mat-card class="space-y-4" *ngFor="let page of Array(perPageControl.value ?? 10).fill(1)">
+        <mat-card-header>
+           <ngx-skeleton-loader count="2"></ngx-skeleton-loader>
+        </mat-card-header>
+        <mat-card-content>
+            <ngx-skeleton-loader count="2"></ngx-skeleton-loader>
+            <!-- <div class="flex gap-3 flex-wrap" *ngFor="let topic of repo?.topics">
+                <div>{{ topic }}</div>
+            </div> -->
+            <ul class="flex gap-3 flex-wrap mt-2">
+                <li class="bg-[#3f51b5] text-white px-3 py-1 rounded-full" *ngFor="let topic of [1,2,3,4]">
+                    <ngx-skeleton-loader></ngx-skeleton-loader>
+                </li>
+            </ul>
+        </mat-card-content>
+    </mat-card>
+</ng-template>

@@ -1,0 +1,52 @@
+<div class="grid grid-cols-2 grid-rows-2 py-6 gap-x-6 max-w-2xl" [ngClass]="userService.isUserLoading?'w-screen':'min-w-fit'">
+    <div class="row-span-2 content-center">
+        <img *ngIf="!userService.isUserLoading" class="rounded h-fit" [src]="(userService.currentUser|async)?.avatar_url" alt="avatar">
+        <ngx-skeleton-loader *ngIf="userService.isUserLoading" class="w-full" [theme]="{'height': '100%'}"></ngx-skeleton-loader>
+    </div>
+    <div>
+        <div class="text-3xl font-semibold text-slate-900">
+            <span *ngIf="!userService.isUserLoading">{{ (userService.currentUser|async)?.name }}</span>
+            <ngx-skeleton-loader *ngIf="userService.isUserLoading"></ngx-skeleton-loader>
+        </div>
+        <div class="text-xl font-thin italic">
+            <span *ngIf="!userService.isUserLoading">{{ (userService.currentUser|async)?.login }}</span>
+            <ngx-skeleton-loader *ngIf="userService.isUserLoading"></ngx-skeleton-loader>
+        </div>
+        <div class="mt-1 font-light">
+            <span *ngIf="!userService.isUserLoading">{{ (userService.currentUser|async)?.bio }}</span>
+            <ngx-skeleton-loader *ngIf="userService.isUserLoading"></ngx-skeleton-loader>
+        </div>
+    </div>
+    <div class="content-end space-y-1">
+        <div class="flex items-center gap-2">
+            <mat-icon class="text-slate-700">link</mat-icon>
+            <a *ngIf="!userService.isUserLoading" [href]="(userService.currentUser|async)?.html_url" target="_blank">{{ (userService.currentUser|async)?.html_url }}</a>
+            <ngx-skeleton-loader *ngIf="userService.isUserLoading" class="w-full relative top-2 h-fit"></ngx-skeleton-loader>
+        </div> 
+        <div class="flex items-center gap-2">
+            <mat-icon class="text-slate-700">apartment</mat-icon>
+            <span *ngIf="!userService.isUserLoading">{{ (userService.currentUser|async)?.company }}</span>
+            <ngx-skeleton-loader *ngIf="userService.isUserLoading" class="w-full relative top-2"></ngx-skeleton-loader>
+        </div>
+        <div class="flex items-center gap-2">
+            <mat-icon class="text-slate-700">location_on</mat-icon>
+            <!-- <span *ngIf="!userService.isUserLoading">{{ (userService.currentUser|async)?.location }}</span>
+            <ngx-skeleton-loader *ngIf="userService.isUserLoading" class="w-full relative top-2"></ngx-skeleton-loader> -->
+            <ng-container *ngIf="!userService.isUserLoading; else skeleton_loader">
+                <span *ngIf="!userService.isUserLoading">{{ (userService.currentUser|async)?.location }}</span>
+            </ng-container>
+        </div>
+        <div class="flex items-center gap-2">
+            <mat-icon class="text-slate-700">public</mat-icon>
+            <!-- <a *ngIf="!userService.isUserLoading" [href]="(userService.currentUser|async)?.blog" target="_blank">{{ (userService.currentUser|async)?.blog }}</a>
+            <ngx-skeleton-loader *ngIf="userService.isUserLoading" class="w-full relative top-2"></ngx-skeleton-loader> -->
+            <ng-container *ngIf="!userService.isUserLoading; else skeleton_loader">
+                <a *ngIf="!userService.isUserLoading" [href]="(userService.currentUser|async)?.blog" target="_blank">{{ (userService.currentUser|async)?.blog }}</a>
+            </ng-container>
+        </div>
+    </div>
+</div>
+
+<ng-template #skeleton_loader>
+    <ngx-skeleton-loader class="w-full relative top-2"></ngx-skeleton-loader>
+</ng-template>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from './services/api.service';
+import { UserService } from './services/user.service';
 
 @Component({
   selector: 'app-root',
@@ -7,11 +8,13 @@ import { ApiService } from './services/api.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit{
+  isNotEvenSearched!: boolean
   constructor(
-    private apiService: ApiService
+    private apiService: ApiService,
+    public userService: UserService
   ) {}
 
   ngOnInit() {
-    this.apiService.getUser('johnpapa').subscribe(console.log);
+    // this.apiService.getUser('johnpapa').subscribe(console.log);
   }
 }

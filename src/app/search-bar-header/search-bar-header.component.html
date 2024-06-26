@@ -1,0 +1,32 @@
+<!-- <p>search-bar-header works!</p> -->
+<!-- <img class="items-center hidden md:flex w-60 h-14" src="https://webprogrammer.io/wp-content/uploads/2022/04/git-commands-cheat-sheet-github-logo.gif" alt="github"> -->
+
+<div class="items-center hidden md:flex select-none">
+    <div><img class="min-w-16 max-w-16" src="https://www.svgrepo.com/show/94698/github.svg" alt="github"></div>
+    <div class="text-3xl tracking-tight font-semibold ml-1">GitHub</div>
+    <div class="text-3xl font-light">Search</div>
+</div>
+
+<form class="relative top-2 w-96 flex-1 flex items-center" #search="ngForm" (ngSubmit)="getUserDetails()">
+    <mat-form-field class="w-72 ml-4 flex-1" appearance="fill">
+        <mat-label>Search for user</mat-label>
+        <input matInput type="text" name="username" [(ngModel)]="username">
+    </mat-form-field>
+    <button class="ml-2" mat-mini-fab color="primary" #searchButton>
+        <mat-icon>search</mat-icon>
+    </button>
+</form>
+
+<div class="hidden items-center sm:flex p-2 text-nowrap">
+    <div class="flex flex-col items-end">
+        <div class="font-medium text-xl">{{ (userService.currentUser | async)?.name }}</div>
+        <div class="font-light text-sm">{{ (userService.currentUser|async)?.login }}</div>
+    </div>
+    <div class="w-16 p-1">
+        <img class="rounded-full" [src]="(userService.currentUser|async)?.avatar_url ||'https://th.bing.com/th/id/OIP.7Wfxa-yuK2YA2RIXxA3mEgHaHa?rs=1&pid=ImgDetMain'" alt="avatar">
+    </div>
+</div>
+
+<!-- <div>
+    <img class="w-40 absolute left-0 -top-10" src="https://static.vecteezy.com/system/resources/previews/024/555/459/original/github-logo-black-transparent-free-png.png" alt="github">
+</div> -->
